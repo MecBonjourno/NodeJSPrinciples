@@ -5,11 +5,13 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev:server": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/server.ts",
-    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
+    "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
+    "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@types/cors": "^2.8.7",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "date-fns": "^2.15.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
@@ -25,6 +27,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/multer": "^1.4.4",
     "ts-node-dev": "^1.0.0-pre.60",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.0.2"
   }
 }
