@@ -1,7 +1,11 @@
 import { getRepository } from 'typeorm'
-import User from '../infra/entities/User';
+import User from '../infra/typeorm/entities/User';
 import path from 'path'
 import fs from 'fs';
+import IUserRepo from '../repositories/IUserRepository'
+import { injectable, inject} from 'tsyringe'
+
+
 
 import UploadConfig from '../../../config/upload'
 
@@ -10,11 +14,18 @@ interface Request{
     avatarFilename: string;
 }
 
+@injectable()
 class UpdateUserAvatarService {
-    public async execute({ user_id, avatarFilename}: Request): Promise<User>{
-        const userRepository = getRepository(User);
 
-        const user = await userRepository.findOne(user_id);
+    constructor(
+        @inject('UsersRepo')
+        private userRepository: IUserRepo){}
+
+
+    public async execute({ user_id, avatarFilename}: Request): Promise<User>{
+        // const userRepository = getRepository(User);
+
+        const user = await this.userRepository.findById(user_id);
 
         if(!user) {
             throw new Error("Only auth users!")
@@ -31,7 +42,7 @@ class UpdateUserAvatarService {
 
         user.avatar = avatarFilename;
 
-        await userRepository.save(user);
+        await this.userRepository.save(user);
 
         return user;
     }
